@@ -1,0 +1,106 @@
+<html>
+<head>
+<title>Limbo</title>
+<link rel="stylesheet" type="text/css" href="limbo.css">
+<script src="jquery.js"></script>
+<script> 
+  $(function(){
+    $("#header").load("header.html"); 
+    $("#footer").load("footer.html"); 
+  });
+</script> 
+</head>
+<body>
+<div id="header">
+  <table id="headerTable" class="vCenter">
+  <tr>
+    <td stye="width: 50%;">
+      <div id="headerTitle"><a href="">Limbo</a></div>
+    </td>
+
+    <td style="text-align: right; width: 50%;">
+      <div id="headerLinks">
+        <a href="">Lost Something?</a> | 
+        <a href="">Found Something?</a> | 
+        <a href="">Admin</a>
+      </div>
+    </td>
+  </tr>
+  </table>
+</div>
+
+
+<div id="content">
+  <h1>Limbo - Found</h1>
+  <form>
+  <table id="formTable">
+    <tr>
+      <td>
+        Item
+      </td>
+      <td>
+        <input type="text" name="item" placeholder="What is the item?"/ required>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Name 
+      </td>
+      <td>
+        <input type="text" name="name" placeholder="Who found the item?"/ required>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Location
+      </td>
+      <td>
+        <input type="text" name="location" placeholder="Where did you find it?"/ required>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Room 
+      </td>
+      <td>
+        <input type="text" name="room" placeholder="Which room was it in?"/ required>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Date
+      </td>
+      <td>
+        <input type="text" name="date" placeholder="When did you find it?" required/>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        Description
+      </td>
+      <td>
+        <textarea name="descritpion" style="resize: vertical;"></textarea>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+      </td>
+      <td>
+        <input type="submit" action="lost.php" method="post" value="Search"/>
+        <input type="submit" action="lost.php" method="post"/>
+      </td>
+    </tr>
+  </table>
+  </form>
+</div>
+
+
+<div id="footer">
+  <div id="footerText" class="vCenter">
+    Brendon Boldt | Alex Goncalves
+  </div>
+</div>
+</body>
+</html>
