@@ -25,6 +25,7 @@ INSERT INTO users (username, email, pass)
 DROP TABLE stuff;
 CREATE TABLE IF NOT EXISTS stuff (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	item TEXT NOT NULL,
 	location_id INT NOT NULL,
 	description TEXT NOT NULL,
 	create_date DATETIME NOT NULL,
@@ -35,6 +36,15 @@ CREATE TABLE IF NOT EXISTS stuff (
 	status SET("found", "lost", "claimed") NOT NULL,
 	PRIMARY KEY (id)
 );
+
+
+INSERT INTO stuff (item, location_id, description, create_date, update_date, room, status) VALUES
+	("iPhone", 1, "6s", NOW(), NOW(), "1021", 'lost'),
+	("Jacket", 1, "Navy, lightweight", NOW(), NOW(), "0005", 'lost'),
+	("Laptop", 3, "MacBook Pro", NOW(), NOW(), "233", 'lost'),
+	("Phone", 1, "Samsung Galaxy S6", NOW(), NOW(), "1021", 'found'),
+	("Coat", 1, "White", NOW(), NOW(), "0005", 'found'),
+	("Desktop", 3, "Intel i7", NOW(), NOW(), "233", 'found');
 
 # Creates a table representing locations
 DROP TABLE locations;
