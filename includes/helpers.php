@@ -21,7 +21,7 @@ function show_records($dbc) {
   		echo '<TR>';
   		echo '<TH>Number</TH>';
   		echo '<TH>First Name</TH>';
-      echo '<TH>Last Name</TH>';
+	        echo '<TH>Last Name</TH>';
   		echo '</TR>';
 
   		# For each row result, generate a table row

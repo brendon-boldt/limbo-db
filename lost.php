@@ -66,9 +66,8 @@ mysqli_close( $dbc ) ;
 
 
 <head>
-<title>Limbo</title>
+<title>Limbo - Lost</title>
 <link rel="stylesheet" type="text/css" href="limbo.css">
-<script src="jquery.js"></script>
 <script> 
   $(function(){
     $("#header").load("header.html"); 
