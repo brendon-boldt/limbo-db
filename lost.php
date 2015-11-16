@@ -77,24 +77,7 @@ mysqli_close( $dbc ) ;
 </script> 
 </head>
 <body>
-<div id="header">
-  <table id="headerTable" class="vCenter">
-  <tr>
-    <td stye="width: 50%;">
-      <div id="headerTitle"><a href="">Limbo</a></div>
-    </td>
-
-    <td style="text-align: right; width: 50%;">
-      <div id="headerLinks">
-        <a href="">Lost Something?</a> | 
-        <a href="">Found Something?</a> | 
-        <a href="">Admin</a>
-      </div>
-    </td>
-  </tr>
-  </table>
-</div>
-
+<?php include 'header.html' ?>
 
 <div id="content">
   <h1>Limbo - Found</h1>
@@ -165,10 +148,6 @@ mysqli_close( $dbc ) ;
 </div>
 
 
-<div id="footer">
-  <div id="footerText" class="vCenter">
-    Brendon Boldt | Alex Goncalves
-  </div>
-</div>
+<?php include 'footer.html' ?>
 </body>
 </html>
