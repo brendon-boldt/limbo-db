@@ -61,7 +61,23 @@ a {
   color: white;
 }
 
+#formTable {
+	float: left;
+}
+
 #formTable td {
   text-align: right;
   padding: 0 0.5em 0.5em 0.5em;
+}
+
+#resultsTable {
+	margin-right: 20em;
+	float: right;
+	border: solid;
+}
+
+#resultsTable td {
+	border: solid;
+	border-width: 1px;
+	min-width: 5em;
 }

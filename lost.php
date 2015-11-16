@@ -5,7 +5,7 @@
 require( 'includes/connect_db.php' ) ;
 
 # Includes these helper functions
-require( 'includes/helpers.php' ) ;
+require( 'includes/lost_helper.php' ) ;
 if ($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
     /*
     #Checks if id is set
@@ -19,61 +19,58 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
     */
 }
 else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
-    $errors = array();
 
-    /*
-    $num = trim($_POST['num']);
-    $lname = $_POST['lname'];
-    $fname = $_POST['fname'] ;
-    if(!valid_number($num))
-      $errors[] = 'number';
-    if (!valid_name($fname))
-      $errors[] = 'first name';
-    if (!valid_name($lname))
-      $errors[] = 'last name';
+	if (isset($_POST['report_found'])) {
+		$errors = array();
 
-      if(!empty($errors)) {
-        echo '<p style="color:red; font-size: 16pt">There was an error in the following fields: ';
-        foreach ($errors as $field) {
-            echo " - $field";
-        }
-      } else {
-      $result = insert_record($dbc, $num, $lname, $fname) ;
-      echo 'Successfully added';
-      $_POST['num'] = "";
-      $_POST['fname'] = "";
-      $_POST['lname'] = "";
-      }
+		/*
+		$num = trim($_POST['num']);
+		$lname = $_POST['lname'];
+		$fname = $_POST['fname'] ;
+		if(!valid_number($num))
+		$errors[] = 'number';
+		if (!valid_name($fname))
+		$errors[] = 'first name';
+		if (!valid_name($lname))
+		$errors[] = 'last name';
 
-    */
+		if(!empty($errors)) {
+		echo '<p style="color:red; font-size: 16pt">There was an error in the following fields: ';
+		foreach ($errors as $field) {
+		    echo " - $field";
+		}
+		} else {
+		$result = insert_record($dbc, $num, $lname, $fname) ;
+		echo 'Successfully added';
+		$_POST['num'] = "";
+		$_POST['fname'] = "";
+		$_POST['lname'] = "";
+		}
 
-    $item = $_POST['item'];
-    $name = $_POST['name'];
-    $location= $_POST['location'];
-    $room = $_POST['room'];
-    $description = $_POST['description'];
+		*/
 
-    $result = insert_lost_item($dbc, $item, $name, $location, $room, $description);
-      #echo "<p>Added " . $result . " new print(s) ". $name . " @ $" . $price . " .</p>" ;
+		$item = $_POST['item'];
+		$name = $_POST['name'];
+		$location= $_POST['location'];
+		$room = $_POST['room'];
+		$description = $_POST['description'];
+
+		$result = insert_lost_item($dbc, $item, $name, $location, $room, $description);
+		#echo "<p>Added " . $result . " new print(s) ". $name . " @ $" . $price . " .</p>" ;
+		mysqli_close( $dbc ) ;
+	}
 }
 
 # Show the link records
 #show_link_records($dbc);
 
 # Close the connection
-mysqli_close( $dbc ) ;
 ?>
 
 
 <head>
 <title>Limbo - Lost</title>
 <link rel="stylesheet" type="text/css" href="limbo.css">
-<script> 
-  $(function(){
-    $("#header").load("header.html"); 
-    $("#footer").load("footer.html"); 
-  });
-</script> 
 </head>
 <body>
 <?php include 'header.html' ?>
@@ -138,12 +135,30 @@ mysqli_close( $dbc ) ;
       <td>
       </td>
       <td>
-        <input type="submit" value="Search"/>
-        <input type="submit" />
+        <input type="submit" name='search' value="Search"/>
+        <input type="submit" name='report_found' value="Report Found"/>
       </td>
     </tr>
   </table>
   </form>
+
+<table id='resultsTable'>
+<?php
+	if (isset($_POST['search'])) {
+		$array = search_item($dbc, $_POST);	
+		foreach($array as $item) {
+			echo '<tr><td>' . $item['item'] . '</td>';
+			echo '<td>' . $item['location_id'] . '</td>';
+			echo '<td>' . $item['room'] . '</td>';
+			echo '<td>' . $item['description'] . '</td></tr>';
+		}
+	}
+	mysqli_close( $dbc ) ;
+?>
+</table>
+
+
+
 </div>
 
 

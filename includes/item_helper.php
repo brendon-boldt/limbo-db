@@ -1,8 +1,7 @@
 <?php
-require( 'includes/connect_db.php' );
 require( 'includes/helpers.php' );
 
-function get_item_data($id) {
+function get_item_data($dbc, $id) {
   global $dbc;
 
   $query = "SELECT * FROM stuff WHERE id = $id"; 

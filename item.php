@@ -1,8 +1,9 @@
 <?php
+require( 'includes/conenct_db.php' );
 # Includes these helper functions
 require( 'includes/item_helper.php' );
 
-$data = get_item_data($_GET['id']);
+$data = get_item_data($dbc, $_GET['id']);
 
 ?>
 
