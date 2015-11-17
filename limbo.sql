@@ -7,7 +7,7 @@ CREATE DATABASE IF NOT EXISTS limbo_db;
 USE limbo_db;
 
 # Creates table representing administrative users for the database
-DROP TABLE users;
+DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
 	user_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	username VARCHAR(20) NOT NULL,
@@ -22,7 +22,7 @@ INSERT INTO users (username, email, pass)
     VALUES ("admin", "admin@nsa.gov", "gaze11e");
 
 # Creates table representing items in the lost and found
-DROP TABLE stuff;
+DROP TABLE IF EXISTS stuff;
 CREATE TABLE IF NOT EXISTS stuff (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	item TEXT NOT NULL,
@@ -47,7 +47,7 @@ INSERT INTO stuff (item, location_id, description, create_date, update_date, roo
 	("Desktop", 3, "Intel i7", NOW(), NOW(), "233", 'found');
 
 # Creates a table representing locations
-DROP TABLE locations;
+DROP TABLE IF EXISTS locations;
 CREATE TABLE IF NOT EXISTS locations (
 	id INT AUTO_INCREMENT NOT NULL,
 	create_date DATETIME NOT NULL,
