@@ -1,6 +1,6 @@
 <?php
-require('includes/helpers.php');
-require('includes/search_helper.php');
+require_once('includes/helpers.php');
+require_once('includes/search_helper.php');
 
 
 function insert_lost_item($dbc, $item, $owner, $location_name, $room , $description) {
@@ -14,8 +14,9 @@ function insert_lost_item($dbc, $item, $owner, $location_name, $room , $descript
 
 	$results = mysqli_query($dbc,$query) ;
 	check_results($results) ;
+  #mysqli_free_result($results)
 
-	return $results ;
+	return $results;
 }
 
 ?>
