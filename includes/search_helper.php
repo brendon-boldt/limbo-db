@@ -32,4 +32,40 @@ function get_location_id($dbc, $name) {
   return $row['id'];
 }
 
+function index_queries($dbc){
+	#Make the query I want to execute
+	$limit_stopper = 1;
+	$query = "SELECT stuff.item, stuff.status, locations.name FROM stuff JOIN locations ON (locations.id = stuff.location_id) ORDER BY stuff.create_date DESC";
+	#Executes the query I requested
+	$results = mysqli_query($dbc, $query);
+	check_results($results);
+  
+	#Show the results of the execution
+	 if($results){
+		 #Generating the table information
+		 echo '<H1>" RECENTLY IN LIMBO..." </H1>' ;
+		 echo '<TABLE style="margin-left:80px" border="1" length="2" width="2">';
+		 echo '<TR>';
+		 echo '<TH>Name</TH>';
+		 echo '<TH>Status</TH>';
+		 echo '<TH>Location</TH>';
+		 echo '</TR>';
+		 
+		#Generate the table row
+		while($limit_stopper <= 5 && $row = mysqli_fetch_array($results, MYSQLI_ASSOC))
+		{	
+		echo '<TR>';
+		echo '<TD>' . $row['item'] . '</TD>' ;
+		echo '<TD>' . $row['status'] . '</TD>' ;
+		echo '<TD>' . $row['name'] . '</TD>' ;
+		echo '</TR>';
+		$limit_stopper++;
+		}
+		#Thus concludes the table
+		echo '</TABLE>';
+		
+		# Free memory
+		mysqli_free_result($results);
+	}
+}
 ?>

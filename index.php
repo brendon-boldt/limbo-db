@@ -10,6 +10,12 @@
 
 <div id="content">
   <h1>Welcome to Limbo</h1>
+  <br>
+  <h4> If you have recently lost or found an item at Marist College, then this is the database for you! </h4>
+  <br>
+  <?php require('includes/search_helper.php'); 
+  index_queries($dbc);
+  ?>
 </div>
 
 <?php include 'footer.html' ?>
