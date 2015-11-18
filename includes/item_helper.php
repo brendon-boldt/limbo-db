@@ -8,7 +8,7 @@ function get_item_data($dbc, $id) {
 
   $results = mysqli_query( $dbc , $query ) ;
   check_results($results) ;
-  $array = mysqli_fetch_array($results, MYSQLI_ASSOC)
+  $array = mysqli_fetch_array($results, MYSQLI_ASSOC);
   mysqli_free_result($results);
   return $array;
 }

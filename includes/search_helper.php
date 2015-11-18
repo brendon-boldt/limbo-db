@@ -3,17 +3,27 @@ require_once('includes/helpers.php');
 
 # Add status checking
 function search_item($dbc, $values) {
-	$location_id = get_location_id($dbc, $values['location']);	
+	$location_id = get_location_id($dbc, $values['building']);	
 
+	# '~~~' is a string which will not match anything in the database
 	foreach ($values as $key => $value) {
 		if ($value == "")
 			$values[$key] = "~~~";
 	}
+	if (!array_key_exists('owner', $values))
+		$values['owner'] = '~~~';	
+	if (!array_key_exists('finder', $values))
+		$values['finder'] = '~~~';	
+
 	$query = "SELECT * FROM stuff JOIN locations ON (stuff.location_id = locations.id)
-		WHERE item LIKE '%" . $values['item'] . "%' 
-		OR room LIKE '%" . $values['room'] . "%'
-		OR description LIKE '%" . $values['description'] . "%'
-		OR location_id = '" . $location_id . "'";
+		WHERE item LIKE '%$values[item]%' 
+		OR owner LIKE '%$values[owner]%'
+		OR finder LIKE '%$values[finder]%'
+		OR email LIKE '%$values[email]%'
+		OR phone LIKE '%$values[phone]%'
+		OR room LIKE '%$values[room]%'
+		OR description LIKE '%$values[description]%'
+		OR location_id = '$location_id'";
 
 	$results = mysqli_query($dbc, $query);
 	check_results($results);
@@ -31,6 +41,25 @@ function search_item($dbc, $values) {
 	return $array;
 }
 
+function search_item_by_id($dbc, $id) {
+	$query = "SELECT * FROM stuff WHERE id = $id";
+	$results = mysqli_query($dbc, $query);
+	check_results($results);
+	if ($results != true) {
+		echo mysqli_error($dbc);
+		exit();
+	}
+
+	if (!($row = mysqli_fetch_array($results, MYSQLI_ASSOC))) {
+		return -1;
+	}
+	mysqli_free_result($results);
+
+	return $row;
+
+}
+
+
 function get_location_id($dbc, $name) {
 	if (empty($name))
 		return -1;
@@ -47,8 +76,8 @@ function get_location_id($dbc, $name) {
 
 function index_queries($dbc){
 	#Make the query I want to execute
-	$limit_stopper = 1;
-	$query = "SELECT stuff.item, stuff.status, locations.name FROM stuff JOIN locations ON (locations.id = stuff.location_id) ORDER BY stuff.create_date DESC";
+	$limit_stopper = 0;
+	$query = "SELECT * FROM stuff JOIN locations ON (locations.id = stuff.location_id) ORDER BY stuff.create_date DESC";
 	#Executes the query I requested
 	$results = mysqli_query($dbc, $query);
 	check_results($results);
@@ -65,7 +94,7 @@ function index_queries($dbc){
 		 echo '</TR>';
 		 
 		#Generate the table row
-		while($limit_stopper <= 5 && $row = mysqli_fetch_array($results, MYSQLI_ASSOC))
+		while($limit_stopper < 5 && $row = mysqli_fetch_array($results, MYSQLI_ASSOC))
 		{	
 		echo '<TR>';
 		echo '<TD>' . $row['item'] . '</TD>' ;

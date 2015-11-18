@@ -71,13 +71,20 @@ a {
 }
 
 #resultsTable {
-	margin-right: 20em;
+	margin-right: 3em;
 	float: right;
 	border: solid;
 }
 
+#resultsTable th {
+	border: solid;
+	border-width: 2px;
+	min-width: 8em;
+}
+
 #resultsTable td {
+	padding-right: 0.5em;
 	border: solid;
 	border-width: 1px;
-	min-width: 5em;
+	min-width: 8em;
 }

@@ -49,15 +49,17 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 
 		*/
 
-		$item = $_POST['item'];
-		$name = $_POST['name'];
-		$location= $_POST['location'];
-		$room = $_POST['room'];
-		$description = $_POST['description'];
-
-		$result = insert_lost_item($dbc, $item, $name, $location, $room, $description);
-		#echo "<p>Added " . $result . " new print(s) ". $name . " @ $" . $price . " .</p>" ;
+		$values = array();
+		$values['item'] = $_POST['item'];
+		$values['owner'] = $_POST['owner'];
+		$values['phone'] = $_POST['phone'];
+		$values['email'] = $_POST['email'];
+		$values['building'] = $_POST['building'];
+		$values['room'] = $_POST['room'];
+		$values['description'] = $_POST['description'];
+		$result = insert_lost_item($dbc, $values);
 		mysqli_close( $dbc ) ;
+		#Header("Location: /item.php?id=$result");
 	}
 }
 
@@ -92,16 +94,31 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
         Name 
       </td>
       <td>
-      	Add contact information
-        <input type="text" name="name" placeholder="Who found the item?"/>
+        <input type="text" name="owner" placeholder="Who found the item?"/>
       </td>
     </tr>
     <tr>
       <td>
-        Location
+        Phone 
       </td>
       <td>
-        <input type="text" name="location" placeholder="Where did you find it?"/>
+        <input type="text" name="phone" placeholder="Optional"/>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Email 
+      </td>
+      <td>
+        <input type="text" name="email" placeholder="Optional"/>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Building       
+      </td>
+      <td>
+        <input type="text" name="building" placeholder="Where did you find it?"/>
       </td>
     </tr>
     <tr>
@@ -112,23 +129,12 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
         <input type="text" name="room" placeholder="Which room was it in?"/>
       </td>
     </tr>
-    <!--
-    <tr>
-      <td>
-        Date
-      </td>
-      <td>
-        <input type="text" name="date" placeholder="When did you find it?"/>
-      </td>
-    </tr>
-    -->
-
     <tr>
       <td>
         Description
       </td>
       <td>
-        <textarea name="description" form="lostForm" style="resize: vertical;"></textarea>
+        <textarea name="description" form="lostForm" placeholder="Optional" style="resize: vertical;"></textarea>
       </td>
     </tr>
 
@@ -146,10 +152,21 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 <?php
 	if (isset($_POST['search'])) {
 		echo "<table id='resultsTable'>";
+		echo '<tr><th>Item</th>';
+		echo '<th>Owner</th>';
+		echo '<th>Phone</th>';
+		echo '<th>Email</th>';
+		# Location name listed under 'name' in the query
+		echo '<th>Building</th>';
+		echo '<th>Room</th>';
+		echo '<th>Description</th></tr>';
 		$array = search_item($dbc, $_POST);	
 		foreach($array as $item) {
 			echo '<tr><td>' . $item['item'] . '</td>';
 			# Location name listed under 'name' in the query
+			echo '<td>' . $item['owner'] . '</td>';
+			echo '<td>' . $item['phone'] . '</td>';
+			echo '<td>' . $item['email'] . '</td>';
 			echo '<td>' . $item['name'] . '</td>';
 			echo '<td>' . $item['room'] . '</td>';
 			echo '<td>' . $item['description'] . '</td></tr>';
