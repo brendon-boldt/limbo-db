@@ -76,7 +76,7 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 <?php include 'header.html' ?>
 
 <div id="content">
-  <h1>Limbo - Found</h1>
+  <h1>Report/Search Lost Items</h1>
   <form id='lostForm' action='lost.php' method='POST'>
   <table id="formTable">
     <tr>
@@ -84,7 +84,7 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
         Item
       </td>
       <td>
-        <input type="text" name="item" placeholder="What is the item?"/ required>
+        <input type="text" name="item" placeholder="What is the item?"/>
       </td>
     </tr>
     <tr>
@@ -92,7 +92,8 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
         Name 
       </td>
       <td>
-        <input type="text" name="name" placeholder="Who found the item?"/ required>
+      	Add contact information
+        <input type="text" name="name" placeholder="Who found the item?"/>
       </td>
     </tr>
     <tr>
@@ -100,7 +101,7 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
         Location
       </td>
       <td>
-        <input type="text" name="location" placeholder="Where did you find it?"/ required>
+        <input type="text" name="location" placeholder="Where did you find it?"/>
       </td>
     </tr>
     <tr>
@@ -108,7 +109,7 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
         Room 
       </td>
       <td>
-        <input type="text" name="room" placeholder="Which room was it in?"/ required>
+        <input type="text" name="room" placeholder="Which room was it in?"/>
       </td>
     </tr>
     <!--
@@ -117,7 +118,7 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
         Date
       </td>
       <td>
-        <input type="text" name="date" placeholder="When did you find it?" required/>
+        <input type="text" name="date" placeholder="When did you find it?"/>
       </td>
     </tr>
     -->
@@ -136,26 +137,27 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
       </td>
       <td>
         <input type="submit" name='search' value="Search"/>
-        <input type="submit" name='report_found' value="Report Found"/>
+        <input type="submit" name='report_found' value="Report Lost"/>
       </td>
     </tr>
   </table>
   </form>
 
-<table id='resultsTable'>
 <?php
 	if (isset($_POST['search'])) {
+		echo "<table id='resultsTable'>";
 		$array = search_item($dbc, $_POST);	
 		foreach($array as $item) {
 			echo '<tr><td>' . $item['item'] . '</td>';
-			echo '<td>' . $item['location_id'] . '</td>';
+			# Location name listed under 'name' in the query
+			echo '<td>' . $item['name'] . '</td>';
 			echo '<td>' . $item['room'] . '</td>';
 			echo '<td>' . $item['description'] . '</td></tr>';
 		}
+		echo "</table>";
+		mysqli_close( $dbc );
 	}
-	mysqli_close( $dbc ) ;
 ?>
-</table>
 
 
 

@@ -5,7 +5,7 @@ require_once('includes/search_helper.php');
 
 function insert_lost_item($dbc, $item, $owner, $location_name, $room , $description) {
 
-	$location_id = $location_name;
+	$location_id = get_location_id($dbc, $location_name);
 
 	#$valueString = '("' . $item . '","' . $owner . '",' . $location_id . ',"' . $room . '","' . $description . '", NOW(), NOW(), \'lost\')';
 	$valueString = "('$item', '$owner', $location_id, '$room', '$description', NOW(), NOW(), 'lost')";

@@ -1,12 +1,22 @@
 <?php
-require_once('includes/helpers.php')
+require_once('includes/helpers.php');
 
+# Add status checking
 function search_item($dbc, $values) {
-	## Include more search queries
-	$query = "SELECT * FROM stuff WHERE item = '" . $values['item'] . "' OR room = '" . $values['room'] . "'";
+	$location_id = get_location_id($dbc, $values['location']);	
+
+	foreach ($values as $key => $value) {
+		if ($value == "")
+			$values[$key] = "~~~";
+	}
+	$query = "SELECT * FROM stuff JOIN locations ON (stuff.location_id = locations.id)
+		WHERE item LIKE '%" . $values['item'] . "%' 
+		OR room LIKE '%" . $values['room'] . "%'
+		OR description LIKE '%" . $values['description'] . "%'
+		OR location_id = '" . $location_id . "'";
 
 	$results = mysqli_query($dbc, $query);
-  check_results($results);
+	check_results($results);
 	if ($results != true) {
 		echo mysqli_error($dbc);
 		exit();
@@ -22,14 +32,17 @@ function search_item($dbc, $values) {
 }
 
 function get_location_id($dbc, $name) {
-  $query = "SELECT id FROM locations WHERE name LIKE '%$name%'";
-  $results = mysqli_query($dbc, $query);
-  check_results($results);
-  $row = mysqli_fetch_array($results, MYSQLI_ASSOC);
+	if (empty($name))
+		return -1;
+	$query = "SELECT id FROM locations WHERE name LIKE '%$name%'";
+	$results = mysqli_query($dbc, $query);
+	check_results($results);
+	# If no locations matched, return -1
+	if (!($row = mysqli_fetch_array($results, MYSQLI_ASSOC)))
+		return -1;
 	mysqli_free_result($results);
 
-  # Does this check null's?
-  return $row['id'];
+	return $row['id'];
 }
 
 function index_queries($dbc){
