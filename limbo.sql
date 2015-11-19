@@ -9,11 +9,9 @@ USE limbo_db;
 # Creates table representing administrative users for the database
 DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
-	user_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-	username VARCHAR(20) NOT NULL,
+	username VARCHAR(20) NOT NULL PRIMARY KEY,
 	email VARCHAR(60) NOT NULL,
 	pass CHAR(40) NOT NULL,
-	PRIMARY KEY (user_id),
 	UNIQUE (email)
 );
 

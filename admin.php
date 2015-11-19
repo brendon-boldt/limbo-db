@@ -1,3 +1,19 @@
+<?php
+require_once('includes/login_tools.php');
+require_once('includes/connect_db.php');
+
+$result = true;
+if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
+	$result = validate($dbc, $_POST['username'], $_POST['password']);
+	if ($result != false) {
+		session_start();
+		$_SESSION['username'] = $result;
+		Header("Location: /admin/home.php");
+	}
+} elseif (isset($_SESSION['username'])) {
+	Header("Location: /admin/home.php");
+}
+?>
 <head>
 <title>Limbo - Admin</title>
 <link rel="stylesheet" type="text/css" href="limbo.css">
@@ -35,6 +51,12 @@
     </tr>
   </table>
   </form>
+
+  <?php
+	if ($result == false) {
+		echo "Incorrect username or password.<br>";
+	}
+  ?>
 </div>
 
 
