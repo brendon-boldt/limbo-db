@@ -5,49 +5,20 @@
 require( 'includes/connect_db.php' ) ;
 
 # Includes these helper functions
-require( 'includes/lost_helper.php' ) ;
+require( 'includes/item_helper.php' ) ;
 if ($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
-    /*
-    #Checks if id is set
-    if(isset($_GET['id']))
-      show_record($dbc, $_GET['id']) ;
-    else {
-      $num ="";
-      $fname ="";
-      $lname ="";
-    }
-    */
+	$_POST['item'] = '';
+	$_POST['owner'] = ''; 
+	$_POST['phone'] = '';
+	$_POST['email'] = '';
+	$_POST['building'] = '';
+	$_POST['room'] = '';
+	$_POST['description'] = ''; 
 }
 else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 
-	if (isset($_POST['report_found'])) {
+	if (isset($_POST['report_lost'])) {
 		$errors = array();
-
-		/*
-		$num = trim($_POST['num']);
-		$lname = $_POST['lname'];
-		$fname = $_POST['fname'] ;
-		if(!valid_number($num))
-		$errors[] = 'number';
-		if (!valid_name($fname))
-		$errors[] = 'first name';
-		if (!valid_name($lname))
-		$errors[] = 'last name';
-
-		if(!empty($errors)) {
-		echo '<p style="color:red; font-size: 16pt">There was an error in the following fields: ';
-		foreach ($errors as $field) {
-		    echo " - $field";
-		}
-		} else {
-		$result = insert_record($dbc, $num, $lname, $fname) ;
-		echo 'Successfully added';
-		$_POST['num'] = "";
-		$_POST['fname'] = "";
-		$_POST['lname'] = "";
-		}
-
-		*/
 
 		$values = array();
 		$values['item'] = $_POST['item'];
@@ -57,9 +28,10 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 		$values['building'] = $_POST['building'];
 		$values['room'] = $_POST['room'];
 		$values['description'] = $_POST['description'];
-		$result = insert_lost_item($dbc, $values);
-		mysqli_close( $dbc ) ;
-		#Header("Location: /item.php?id=$result");
+		$result = insert_item($dbc, $values, 'lost');
+		$errors = validate_values($dbc, $values);
+		if ($result != false && $errors == 0)
+			Header("Location: /item.php?id=$result");
 	}
 }
 
@@ -86,7 +58,7 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
         Item
       </td>
       <td>
-        <input type="text" name="item" placeholder="What is the item?"/>
+        <input type="text" name="item" placeholder="What is the item?" value="<?php echo $_POST['item']; ?>"/>
       </td>
     </tr>
     <tr>
@@ -94,7 +66,7 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
         Name 
       </td>
       <td>
-        <input type="text" name="owner" placeholder="Who found the item?"/>
+        <input type="text" name="owner" placeholder="Who lost the item?" value="<?php echo $_POST['owner']; ?>"/>
       </td>
     </tr>
     <tr>
@@ -102,7 +74,7 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
         Phone 
       </td>
       <td>
-        <input type="text" name="phone" placeholder="Optional"/>
+        <input type="text" name="phone" placeholder="Optional" value="<?php echo $_POST['phone']; ?>"/>
       </td>
     </tr>
     <tr>
@@ -110,7 +82,7 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
         Email 
       </td>
       <td>
-        <input type="text" name="email" placeholder="Optional"/>
+        <input type="text" name="email" placeholder="Optional" value="<?php echo $_POST['email']; ?>"/>
       </td>
     </tr>
     <tr>
@@ -118,7 +90,7 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
         Building       
       </td>
       <td>
-        <input type="text" name="building" placeholder="Where did you find it?"/>
+        <input type="text" name="building" placeholder="Where did you find it?" value="<?php echo $_POST['building']; ?>"/>
       </td>
     </tr>
     <tr>
@@ -126,7 +98,7 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
         Room 
       </td>
       <td>
-        <input type="text" name="room" placeholder="Which room was it in?"/>
+        <input type="text" name="room" placeholder="Which room was it in?" value="<?php echo $_POST['room']; ?>"/>
       </td>
     </tr>
     <tr>
@@ -134,7 +106,7 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
         Description
       </td>
       <td>
-        <textarea name="description" form="lostForm" placeholder="Optional" style="resize: vertical;"></textarea>
+        <textarea name="description" form="lostForm" placeholder="Description" style="resize: vertical;" ><?php echo $_POST['description']; ?></textarea>
       </td>
     </tr>
 
@@ -143,7 +115,7 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
       </td>
       <td>
         <input type="submit" name='search' value="Search"/>
-        <input type="submit" name='report_found' value="Report Lost"/>
+        <input type="submit" name='report_lost' value="Report Lost"/>
       </td>
     </tr>
   </table>
@@ -172,7 +144,12 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 			echo '<td>' . $item['description'] . '</td></tr>';
 		}
 		echo "</table>";
-		mysqli_close( $dbc );
+	} elseif (isset($_POST['report_lost'])) {
+		echo "<div style='margin-left:5em'>";
+		foreach($errors as $e) {
+			echo $e;
+		}
+		echo '</div>';
 	}
 ?>
 

@@ -24,7 +24,7 @@ INSERT INTO users (username, email, pass)
 # Creates table representing items in the lost and found
 DROP TABLE IF EXISTS stuff;
 CREATE TABLE IF NOT EXISTS stuff (
-	id INT UNSIGNED NOT NULL,
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	item TEXT NOT NULL,
 	location_id INT NOT NULL,
 	description TEXT NOT NULL,
@@ -40,13 +40,13 @@ CREATE TABLE IF NOT EXISTS stuff (
 );
 
 
-INSERT INTO stuff (id, item, location_id, description, create_date, update_date, room, status, owner, finder) VALUES
-	(1, "iPhone", 1, "6s", NOW(), NOW(), "1021", 'lost', "Hera", NULL),
-	(2, "Jacket", 1, "Navy, lightweight", NOW(), NOW(), "0005", 'lost', "Ares", NULL),
-	(3, "Laptop", 3, "MacBook Pro", NOW(), NOW(), "233", 'lost', "Aphrodite", NULL),
-	(4, "Phone", 1, "Samsung Galaxy S6", NOW(), NOW(), "1021", 'found', NULL, "Zeus"),
-	(5, "Coat", 1, "White", NOW(), NOW(), "0005", 'found', NULL, "Athena"),
-	(6, "Desktop", 3, "Intel i7", NOW(), NOW(), "233", 'found', NULL, "Hermes");
+INSERT INTO stuff (item, location_id, description, create_date, update_date, room, status, owner, finder) VALUES
+	("iPhone", 1, "6s", NOW(), NOW(), "1021", 'lost', "Hera", NULL),
+	("Jacket", 1, "Navy, lightweight", NOW(), NOW(), "0005", 'lost', "Ares", NULL),
+	("Laptop", 3, "MacBook Pro", NOW(), NOW(), "233", 'lost', "Aphrodite", NULL),
+	("Phone", 1, "Samsung Galaxy S6", NOW(), NOW(), "1021", 'found', NULL, "Zeus"),
+	("Coat", 1, "White", NOW(), NOW(), "0005", 'found', NULL, "Athena"),
+	("Desktop", 3, "Intel i7", NOW(), NOW(), "233", 'found', NULL, "Hermes");
 
 # Creates a table representing locations
 DROP TABLE IF EXISTS locations;
