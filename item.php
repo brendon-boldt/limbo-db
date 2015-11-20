@@ -3,7 +3,13 @@ require( 'includes/connect_db.php' );
 # Includes these helper functions
 require( 'includes/search_helper.php' );
 
+if(empty($_GET['id']))
+{
+    $_GET['id'] = -1;
+}
+
 $data = search_item_by_id($dbc, $_GET['id']);
+//$_SESSION['id'] = isset($_GET['id']) ? $_GET['id'] : "";
 /*
 foreach($data as $key => $value)
 	echo $key . " => " . $value . "<br>";

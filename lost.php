@@ -123,6 +123,7 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 
 <?php
 	if (isset($_POST['search'])) {
+		$identifier = $_POST['search'];
 		echo "<table id='resultsTable'>";
 		echo '<tr><th>Item</th>';
 		echo '<th>Owner</th>';
@@ -134,7 +135,7 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 		echo '<th>Description</th></tr>';
 		$array = search_item($dbc, $_POST);	
 		foreach($array as $item) {
-			echo '<tr><td>' . $item['item'] . '</td>';
+			echo '<tr><td><a href=item.php?id=' . $item['item_id'] .'>' . $item['item'] . '</a></td>';
 			# Location name listed under 'name' in the query
 			echo '<td>' . $item['owner'] . '</td>';
 			echo '<td>' . $item['phone'] . '</td>';
@@ -143,6 +144,7 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 			echo '<td>' . $item['room'] . '</td>';
 			echo '<td>' . $item['description'] . '</td></tr>';
 		}
+		echo "Click on the name of the item for more details!";
 		echo "</table>";
 	} elseif (isset($_POST['report_lost'])) {
 		echo "<div style='margin-left:5em'>";

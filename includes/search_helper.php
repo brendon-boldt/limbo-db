@@ -15,7 +15,7 @@ function search_item($dbc, $values) {
 	if (!array_key_exists('finder', $values))
 		$values['finder'] = '~~~';	
 
-	$query = "SELECT * FROM stuff JOIN locations ON (stuff.location_id = locations.id)
+	$query = "SELECT *, stuff.id AS item_id FROM stuff JOIN locations ON (stuff.location_id = locations.id)
 		WHERE item LIKE '%$values[item]%' 
 		OR owner LIKE '%$values[owner]%'
 		OR finder LIKE '%$values[finder]%'
