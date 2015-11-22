@@ -2,7 +2,7 @@
 require_once('includes/helpers.php');
 
 # Add status checking
-function search_item($dbc, $values) {
+function search_item($dbc, $values, $status) {
 	$location_id = get_location_id($dbc, $values['building']);	
 
 	# '~~~' is a string which will not match anything in the database
@@ -16,14 +16,15 @@ function search_item($dbc, $values) {
 		$values['finder'] = '~~~';	
 
 	$query = "SELECT *, stuff.id AS item_id FROM stuff JOIN locations ON (stuff.location_id = locations.id)
-		WHERE item LIKE '%$values[item]%' 
+		WHERE (item LIKE '%$values[item]%' 
 		OR owner LIKE '%$values[owner]%'
 		OR finder LIKE '%$values[finder]%'
 		OR email LIKE '%$values[email]%'
 		OR phone LIKE '%$values[phone]%'
 		OR room LIKE '%$values[room]%'
 		OR description LIKE '%$values[description]%'
-		OR location_id = '$location_id'";
+		OR location_id = '$location_id')
+		AND status = '$status'";
 
 	$results = mysqli_query($dbc, $query);
 	check_results($results);
@@ -73,6 +74,20 @@ function get_location_id($dbc, $name) {
 
 	return $row['id'];
 }
+
+function get_location_name($dbc, $id) {
+	if (empty($id))
+		return '';
+	$query = "SELECT name FROM locations WHERE id = $id";
+	$result = mysqli_query($dbc, $query);
+	check_results($result);
+	if (!($row = mysqli_fetch_array($result, MYSQLI_ASSOC)))
+		return '';
+	mysqli_free_result($result);
+
+	return $row['name'];
+}
+
 
 function index_queries($dbc){
 	#Make the query I want to execute

@@ -1,9 +1,9 @@
 <?php
+session_start();
 require('includes/search_helper.php'); 
 require('includes/connect_db.php'); 
 	  
 ?>
-<html>
 <head>
 <title>Limbo</title>
 <link rel="stylesheet" type="text/css" href="limbo.css">
@@ -11,7 +11,7 @@ require('includes/connect_db.php');
 </head>
 <body>
 
-<?php include 'header.html' ?>
+<?php include 'header.php' ?>
 
 <div id="content">
   <h1>Welcome to Limbo</h1>
@@ -23,8 +23,7 @@ require('includes/connect_db.php');
   ?>
 </div>
 
-<?php include 'footer.html' ?>
+<?php include 'footer.php' ?>
 
 </div>
 </body>
-</html>

@@ -3,15 +3,15 @@ require_once( 'includes/helpers.php' );
 require_once('includes/search_helper.php');
 
 function get_item_data($dbc, $id) {
-  global $dbc;
+		global $dbc;
 
-  $query = "SELECT * FROM stuff WHERE id = $id"; 
+		$query = "SELECT * FROM stuff WHERE id = $id"; 
 
-  $results = mysqli_query( $dbc , $query ) ;
-  check_results($results) ;
-  $array = mysqli_fetch_array($results, MYSQLI_ASSOC);
-  mysqli_free_result($results);
-  return $array;
+		$results = mysqli_query( $dbc , $query ) ;
+		check_results($results) ;
+		$array = mysqli_fetch_array($results, MYSQLI_ASSOC);
+		mysqli_free_result($results);
+		return $array;
 }
 
 function insert_item($dbc, $values, $status) {
@@ -59,6 +59,22 @@ function validate_values($dbc, $values) {
 	if (empty($errors))
 		return 0;
 	return $errors;
+}
+
+function perform_action($dbc, $id, $action) {
+	if ($action == 'delete') {
+		$query = "DELETE FROM stuff WHERE id = $id";
+	} elseif ($action == 'found') {
+		$query = "UPDATE stuff SET status = 'found' WHERE id = $id";
+	} elseif ($action == 'lost') {
+		$query = "UPDATE stuff SET status = 'lost' WHERE id = $id";
+	} else {
+		return false;
+	}
+
+	$result = mysqli_query($dbc, $query);
+	check_results($result);
+	return $result;
 }
 
 ?>

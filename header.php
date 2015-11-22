@@ -7,9 +7,8 @@
 
     <td style="text-align: right; width: 50%;">
       <div id="headerLinks">
-        <a href="/lost.php">Report/Search Lost Items</a> | 
-        <a href="/found.php">Report/Search Found Items</a> | 
-        <a href="/admin.php">Admin</a>
+        <a href="/searchreport.php?status=lost">Report/Search Lost Items</a> | 
+        <a href="/searchreport.php?status=found">Report/Search Found Items</a>
       </div>
     </td>
   </tr>

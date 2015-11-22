@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once('includes/login_tools.php');
 require_once('includes/connect_db.php');
 
@@ -18,7 +19,7 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 <title>Limbo - Admin</title>
 <link rel="stylesheet" type="text/css" href="limbo.css">
 </head>
-<?php include 'header.html' ?>
+<?php include 'header.php' ?>
 
 <div id='content'>
 <h1>Admin Login</h1>
@@ -38,7 +39,7 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
       	Password
       </td>
       <td>
-        <input type="text" name="password" placeholder="Password"/ required>
+        <input type="password" name="password" placeholder="Password"/ required>
       </td>
     </tr>
 
@@ -61,4 +62,4 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 
 
 
-<?php include 'footer.html' ?>
+<?php include 'footer.php' ?>

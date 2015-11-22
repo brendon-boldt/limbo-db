@@ -6,6 +6,11 @@ body {
   color: #eee;
 }
 
+a {
+  color: #ccc;
+  text-decoration: underline;
+}
+
 #content {
   margin: 3em 3em 3em 3em;
 }
@@ -24,7 +29,7 @@ body {
   padding: 1em 0 1em 0;
 }
 
-a {
+#header a {
   color: white;
   text-decoration: none;
 }
