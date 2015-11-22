@@ -1,17 +1,23 @@
 <?php
+# Session started to check if the user is logged in
 session_start();
 require_once('includes/login_tools.php');
 require_once('includes/connect_db.php');
 
+# Give a default value to result
 $result = true;
 if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
+  # Check if the username and password match something in the database
 	$result = validate($dbc, $_POST['username'], $_POST['password']);
+  # If the validation occurred succesfully
 	if ($result != false) {
 		session_start();
 		$_SESSION['username'] = $result;
+    # The user is now logged in and will be redirected to the admin home
 		Header("Location: /admin/home.php");
 	}
 } elseif (isset($_SESSION['username'])) {
+  # Redirect to admin home is user is already loged in
 	Header("Location: /admin/home.php");
 }
 ?>

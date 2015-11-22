@@ -5,16 +5,21 @@ require_once( 'includes/connect_db.php' );
 require_once( 'includes/search_helper.php' );
 require_once( 'includes/item_helper.php' );
 
+# If no id is set, give it a default of -1
 if(empty($_GET['id'])) {
 	$_GET['id'] = -1;
 }
+# Search for the item specified by id in the database
 $data = search_item_by_id($dbc, $_GET['id']);
 if ($data == -1) {
+  # If no id matches, redirect to the search page
 	header("Location: /searchreport.php");
 }
 
 if (isset($_POST['action'])) {
+  # If the admin specified an update/delete action, perform it now
 	perform_action($dbc, $_GET['id'], $_POST['action']);
+  # Refresh to show updates
 	header("Refresh:0");
 }
 ?>
@@ -25,6 +30,7 @@ if (isset($_POST['action'])) {
 </head>
 <?php include 'header.php' ?>
 <div id='content'>
+<!-- Display Item information here -->
 <h1 style="font-size: 42pt;">Item Information - <?php if ($data != -1) echo $data['item']; ?></h1>
 <span style="font-size:18pt"><b>Status: </b><?php echo ucwords($data['status']) ?></span><br>
 <?php echo "Near $data[room] in " . get_location_name($dbc, $data['id']); ?><br><br>
@@ -44,6 +50,7 @@ Date Updated - <?php echo $data['update_date'] ?>
 
 
 <?php
+# If an admin is logged in, display update/delete actions
 if (isset($_SESSION['username'])) {
 	echo '<br><br><br>';
 	#echo "Actions: <form name='form' target='item.php?id=$_GET[id]' method='post'><select name='action'>

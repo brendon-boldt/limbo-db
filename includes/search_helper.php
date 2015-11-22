@@ -1,7 +1,7 @@
 <?php
 require_once('includes/helpers.php');
 
-# Add status checking
+# Search for an item based on field values
 function search_item($dbc, $values, $status) {
 	$location_id = get_location_id($dbc, $values['building']);	
 
@@ -10,13 +10,16 @@ function search_item($dbc, $values, $status) {
 		if ($value == "")
 			$values[$key] = "~~~";
 		else
+      # Sanitize the input
 			$values[$key] = mysqli_real_escape_string($dbc, $value);
 	}
+  # More non-matching stings
 	if (!array_key_exists('owner', $values))
 		$values['owner'] = '~~~';	
 	if (!array_key_exists('finder', $values))
 		$values['finder'] = '~~~';	
 
+  # Build the behemoth of a query
 	$query = "SELECT *, stuff.id AS item_id FROM stuff JOIN locations ON (stuff.location_id = locations.id)
 		WHERE (item LIKE '%$values[item]%' 
 		OR owner LIKE '%$values[owner]%'
@@ -35,6 +38,7 @@ function search_item($dbc, $values, $status) {
 		exit();
 	}
 
+  # Build an array of row results to be returned by the function
 	$array = array();
 	while ($row = mysqli_fetch_array($results, MYSQLI_ASSOC)) {
 		$array[] = $row;
@@ -44,6 +48,7 @@ function search_item($dbc, $values, $status) {
 	return $array;
 }
 
+# Get item information based on the id given
 function search_item_by_id($dbc, $id) {
 	$query = "SELECT * FROM stuff WHERE id = $id";
 	$results = mysqli_query($dbc, $query);
@@ -62,7 +67,7 @@ function search_item_by_id($dbc, $id) {
 
 }
 
-
+# Search for location and return its id based ona given name (keyword search)
 function get_location_id($dbc, $name) {
 	if (empty($name))
 		return -1;
@@ -79,6 +84,7 @@ function get_location_id($dbc, $name) {
 	return $row['id'];
 }
 
+# Get the name of location based on the id given
 function get_location_name($dbc, $id) {
 	if (empty($id))
 		return '';
@@ -92,7 +98,7 @@ function get_location_name($dbc, $id) {
 	return $row['name'];
 }
 
-
+# Prints the most recently updated items on the home page
 function index_queries($dbc){
 	#Make the query I want to execute
 	$limit_stopper = 0;

@@ -2,8 +2,9 @@
 require_once( 'includes/helpers.php' );
 require_once('includes/search_helper.php');
 
+# Get the information related to an item by id
 function get_item_data($dbc, $id) {
-		global $dbc;
+		#global $dbc;
 
 		$query = "SELECT * FROM stuff WHERE id = $id"; 
 
@@ -14,13 +15,16 @@ function get_item_data($dbc, $id) {
 		return $array;
 }
 
+# Insert a lost or found item into the database
 function insert_item($dbc, $values, $status) {
 	if ($status == 'lost')
 		$person = 'owner';
 	else
 		$person = 'finder';
+  # Get the next id for the stuff table
 	$id = get_next_id($dbc);
 
+  # Get the location id by name
 	$location_id = get_location_id($dbc, $values['building']);
 	$valueString = "($id, '$values[item]', '$values[owner]', '$values[phone]', '$values[email]', $location_id, '$values[room]', '$values[description]', NOW(), NOW(), '$status')";
 	$query = "INSERT INTO stuff(id, item, $person, phone, email, location_id, room, description, create_date, update_date, status) VALUES " . $valueString;
@@ -31,19 +35,23 @@ function insert_item($dbc, $values, $status) {
 	if (!$results)
 		return false;
 	else {
+    # If succesfful, return the id of the newly inserted item
 		return $id;
 	}
 }
 
+# Get the next id in the stuff table
 function get_next_id($dbc) {
 	$query = "SELECT id FROM stuff ORDER BY id DESC";
 	$results = mysqli_query($dbc, $query);
 	if (!$results)
 		return 0;
 	$row = mysqli_fetch_array($results, MYSQLI_ASSOC);
+  # Return the id one greater than the highest in the table
 	return $row['id'] + 1;
 }
 
+# Check that all required fields are filled
 function validate_values($dbc, $values) {
 	$errors = array();
 
@@ -61,6 +69,7 @@ function validate_values($dbc, $values) {
 	return $errors;
 }
 
+# Perform an admin action; change the status of an item or delete the item
 function perform_action($dbc, $id, $action) {
 	if ($action == 'delete') {
 		$query = "DELETE FROM stuff WHERE id = $id";

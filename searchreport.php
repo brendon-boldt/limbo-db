@@ -5,17 +5,21 @@ require( 'includes/connect_db.php' ) ;
 # Includes these helper functions
 require( 'includes/item_helper.php' ) ;
 
+# If lost/found is not specified, set the status to lost
 if (!isset($_GET['status'])) {
 	$_GET['status'] = 'lost';
 }
 $page_status = $_GET['status'];
+# If the status is something other than lost or found, set it to lost
 if ($page_status != 'lost' && $page_status != 'found')
 	$page_status = 'lost';
+# If the item is lost, we want to know about the owner; if found, the finder
 if ($page_status == 'lost')
 	$person = 'owner';
 else
 	$person = 'finder';
 
+# Make all fields empty by default
 if ($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
 	$_POST['item'] = '';
 	$_POST[$person] = ''; 
@@ -27,6 +31,7 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
 }
 else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 
+  # If a report action was submitted, insert the information into the database
 	if (isset($_POST['report_lost'])) {
 		$errors = array();
 
@@ -39,16 +44,14 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 		$values['room'] = $_POST['room'];
 		$values['description'] = $_POST['description'];
 		$result = insert_item($dbc, $values, $page_status);
+    # Check for any errors
 		$errors = validate_values($dbc, $values);
-		if ($result != false && $errors == 0)
+    if ($result != false && $errors == 0) {
+      # If the record was inserted successfully, redirect to the item information page
 			Header("Location: /item.php?id=$result");
+    }
 	}
 }
-
-# Show the link records
-#show_link_records($dbc);
-
-# Close the connection
 ?>
 
 
@@ -132,6 +135,7 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
   </form>
 
 <?php
+  # If the user submitted a search action, generate the search table here
 	if (isset($_POST['search'])) {
 		$identifier = $_POST['search'];
 		echo "<table id='resultsTable'>";
@@ -143,6 +147,7 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 		echo '<th>Building</th>';
 		echo '<th>Room</th>';
 		echo '<th>Description</th></tr>';
+    # Search the database with the specified fields
 		$array = search_item($dbc, $_POST, $page_status);	
 		foreach($array as $item) {
 			echo '<tr><td><a href=item.php?id=' . $item['item_id'] .'>' . $item['item'] . '</a></td>';

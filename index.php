@@ -19,6 +19,7 @@ require('includes/connect_db.php');
   <h4> If you have recently lost or found an item at Marist College, then this is the database for you! </h4>
   <br>
   <?php
+    # Print the most recently updated items in Limbo
   	index_queries($dbc);
   ?>
 </div>
