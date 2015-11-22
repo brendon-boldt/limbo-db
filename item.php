@@ -46,12 +46,13 @@ Date Updated - <?php echo $data['update_date'] ?>
 <?php
 if (isset($_SESSION['username'])) {
 	echo '<br><br><br>';
-	echo "Actions: <form name='form' target='item.php?id=$_GET[id]' method='post'><select name='action'>
+	#echo "Actions: <form name='form' target='item.php?id=$_GET[id]' method='post'><select name='action'>
+	echo "Actions: <form name='form' target='_self' method='post'><select name='action'>
 		<option value='lost'>Change status to lost</option>
 		<option value='found'>Change status to found</option>
 		<option value='delete'>Delete item</option>
 	</select>
-	<input type='submit' value='Submit'/>
+	<input type='submit' value='Submit' target='_self'/>
 	</form>";
 }
 ?>
