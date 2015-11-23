@@ -64,6 +64,10 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 		echo "Incorrect username or password.<br>";
 	}
   ?>
+
+<br><br><br>
+<br><br><br>
+<a href='/'>Back</a>
 </div>
 
 

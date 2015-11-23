@@ -50,6 +50,7 @@ function search_item($dbc, $values, $status) {
 
 # Get item information based on the id given
 function search_item_by_id($dbc, $id) {
+	$id = mysqli_real_escape_string($dbc, $id);
 	$query = "SELECT * FROM stuff WHERE id = $id";
 	$results = mysqli_query($dbc, $query);
 	check_results($results);
@@ -88,6 +89,7 @@ function get_location_id($dbc, $name) {
 function get_location_name($dbc, $id) {
 	if (empty($id))
 		return '';
+	$id = mysqli_real_escape_string($dbc, $id);
 	$query = "SELECT name FROM locations WHERE id = $id";
 	$result = mysqli_query($dbc, $query);
 	check_results($result);

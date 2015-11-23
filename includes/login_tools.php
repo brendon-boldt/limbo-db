@@ -10,7 +10,10 @@ function validate($dbc, $username = '', $password = '') {
 	if(empty($password))
 		return false;
 
-	$query = "SELECT * FROM users WHERE username = '$username' AND pass = '$password'";
+	$username = mysqli_real_escape_string($dbc, $username);
+	$password = mysqli_real_escape_string($dbc, $password);
+	$password_hash = hash('sha256', $password);
+	$query = "SELECT * FROM users WHERE username = '$username' AND pass = '$password_hash'";
 
 	$results = mysqli_query($dbc, $query);
 	check_results($results);

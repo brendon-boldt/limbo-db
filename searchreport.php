@@ -31,8 +31,8 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
 }
 else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 
-  # If a report action was submitted, insert the information into the database
-	if (isset($_POST['report_lost'])) {
+	# If a report action was submitted, insert the information into the database
+	if (isset($_POST['report'])) {
 		$errors = array();
 
 		$values = array();
@@ -44,12 +44,23 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 		$values['room'] = $_POST['room'];
 		$values['description'] = $_POST['description'];
 		$result = insert_item($dbc, $values, $page_status);
-    # Check for any errors
+		# Check for any errors
 		$errors = validate_values($dbc, $values);
-    if ($result != false && $errors == 0) {
-      # If the record was inserted successfully, redirect to the item information page
+
+		if ($result != false && $errors == 0) {
+			# If the record was inserted successfully, redirect to the item information page
 			Header("Location: /item.php?id=$result");
-    }
+		} else {
+			/*
+			echo 'The following errors occurred: ';
+			echo "<div style='margin-left:5em'>";
+			foreach($errors as $e) {
+				echo $e;
+			}
+			echo '</div>';
+			*/
+
+		}
 	}
 }
 ?>
@@ -161,15 +172,20 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 		}
 		echo "</table>";
 	} elseif (isset($_POST['report'])) {
+	
 		echo "<div style='margin-left:5em'>";
 		foreach($errors as $e) {
 			echo $e;
 		}
 		echo '</div>';
+		
 	}
 ?>
 
-
+<br><br><br> <br><br><br>
+<br><br><br> <br><br><br>
+<br><br><br> <br><br><br>
+<a href='/'>Back<a>
 
 </div>
 

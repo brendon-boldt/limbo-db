@@ -4,15 +4,14 @@ require_once('includes/search_helper.php');
 
 # Get the information related to an item by id
 function get_item_data($dbc, $id) {
-		#global $dbc;
+	$id = mysqli_real_escape_string($dbc, $id);
+	$query = "SELECT * FROM stuff WHERE id = $id"; 
 
-		$query = "SELECT * FROM stuff WHERE id = $id"; 
-
-		$results = mysqli_query( $dbc , $query ) ;
-		check_results($results) ;
-		$array = mysqli_fetch_array($results, MYSQLI_ASSOC);
-		mysqli_free_result($results);
-		return $array;
+	$results = mysqli_query( $dbc , $query ) ;
+	check_results($results) ;
+	$array = mysqli_fetch_array($results, MYSQLI_ASSOC);
+	mysqli_free_result($results);
+	return $array;
 }
 
 # Insert a lost or found item into the database
@@ -21,12 +20,19 @@ function insert_item($dbc, $values, $status) {
 		$person = 'owner';
 	else
 		$person = 'finder';
-  # Get the next id for the stuff table
+	# Get the next id for the stuff table
 	$id = get_next_id($dbc);
 
-  # Get the location id by name
+	foreach ($values as $key => $value) {
+		# Sanitize the input
+		$values[$key] = mysqli_real_escape_string($dbc, $value);
+	}
+
+	# Get the location id by name
+	$building = mysqli_real_escape_string($dbc, $id);
 	$location_id = get_location_id($dbc, $values['building']);
-	$valueString = "($id, '$values[item]', '$values[owner]', '$values[phone]', '$values[email]', $location_id, '$values[room]', '$values[description]', NOW(), NOW(), '$status')";
+	$person_value = $values[$person];
+	$valueString = "($id, '$values[item]', '$person_value', '$values[phone]', '$values[email]', $location_id, '$values[room]', '$values[description]', NOW(), NOW(), '$status')";
 	$query = "INSERT INTO stuff(id, item, $person, phone, email, location_id, room, description, create_date, update_date, status) VALUES " . $valueString;
 	
 	$results = mysqli_query($dbc,$query);

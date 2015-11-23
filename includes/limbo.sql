@@ -12,14 +12,14 @@ CREATE TABLE IF NOT EXISTS users (
 	user_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	username VARCHAR(20) NOT NULL,
 	email VARCHAR(60) NOT NULL,
-	pass CHAR(40) NOT NULL,
+	pass CHAR(64) NOT NULL,
 	PRIMARY KEY (user_id),
 	UNIQUE (email)
 );
 
 # Creates an admin user in the users table
 INSERT INTO users (username, email, pass)
-    VALUES ("admin", "admin@nsa.gov", "gaze11e");
+    VALUES ("admin", "admin@nsa.gov", "3bba22597cc6eab9cdab248358a0f0500108a0e0ec8a7384cdf5cb62e8108adb");
 
 # Creates table representing items in the lost and found
 DROP TABLE IF EXISTS stuff;
