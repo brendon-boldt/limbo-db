@@ -1,3 +1,7 @@
+<?php
+require_once( '../admin_tools.php.' );
+
+?>
 <html>
 <head>
 <title>Limbo - Password Change</title>
@@ -18,7 +22,7 @@
 		Current Password
 		</td>
 		<td> 
-		   <input type="text" name="current_password" placeholder="Your current password here" />
+		   <input type="text" name="current_pass" placeholder="Your current password here" />
 		</td>
 	</tr>
 	<tr>
@@ -26,7 +30,7 @@
 		Enter New Password
 		</td>
 		<td>
-		   <input type="text" name="New Password" placeholder="Your new password here"/>
+		   <input type="text" name="new_pass" placeholder="Your new password here"/>
 		</td>
 	</tr>
 	<tr>
@@ -34,7 +38,7 @@
 		Confirm New Password
 		</td>
 		<td>
-		   <input type="text" name="Confirm Password" placeholder="Confirm your password here" "/>
+		   <input type="text" name="confirm_pass" placeholder="Confirm your password here"/>
 		</td>
 	</tr>
 	
@@ -47,6 +51,15 @@
 	</tr>
 	</table>
 	</form>
+	<br><br><br>
+	<?php
+		if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
+			$result = change_password($_SESSION['username'], $_POST['current_pass'],  $_POST['new_pass'],  $_POST['confirm_pass']);
+			if ($result) {
+				echo "Password change successful";
+			}
+		}
+	?>
 </div>
 </body>
 </html>
