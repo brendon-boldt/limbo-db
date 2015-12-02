@@ -6,11 +6,18 @@
 
 # Otherwise fail gracefully and explain the error. 
 
-$dbc = @mysqli_connect ( 'localhost', 'root', '', 'limbo_db' )
+$dbc = @mysqli_connect ( 'localhost', 'root', '', 'limbo_db' );
 
 
-OR die ( mysqli_connect_error() ) ;
+//OR die ( mysqli_connect_error() ) ;
 
+if ($dbc == false) {
+	$command = "\"C:\\Program Files (x86)\\EasyPHP-DevServer-14.1VC11\\binaries\\mysql\\bin\\mysql\" -u root < \"C:\\Program Files (x86)\\EasyPHP-DevServer-14.1VC11\\data\\localweb\\includes\limbo.sql\"";
+	//$output = shell_exec($command . './shellexec.sql')
+	$output = shell_exec($command);
+	echo $output;
+	$dbc = @mysqli_connect ( 'localhost', 'root', '', 'limbo_db' );
+}
 
 # Set encoding to match PHP script encoding.
 

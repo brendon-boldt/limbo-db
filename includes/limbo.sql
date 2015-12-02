@@ -89,3 +89,5 @@ INSERT INTO locations (create_date, update_date, name) VALUES
 	(NOW(), NOW(), "Lower Townhouses"),
 	(NOW(), NOW(), "Lower West Cedar Townhouses"),
 	(NOW(), NOW(), "Upper West Cedar Townhouses");
+
+SELECT 'Script executed successfully.' AS '';
