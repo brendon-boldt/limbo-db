@@ -1,7 +1,7 @@
 <?php
 # Session started to check if the user is logged in
 session_start();
-require_once('includes/admin_tool.php');
+require_once('includes/admin_tools.php');
 require_once('includes/connect_db.php');
 
 # Give a default value to result

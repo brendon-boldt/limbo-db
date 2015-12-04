@@ -1,6 +1,6 @@
 <?php
 
-require_once( 'includes/helpers.php.' );
+require_once( 'helpers.php.' );
 
 # Determine whether the submitted username and password are in the database
 function validate($dbc, $username = '', $password = '') {
@@ -35,22 +35,105 @@ function validate($dbc, $username = '', $password = '') {
 	return $login_name;
 }
 
-function change_password($arg_username, $arg_current_pass, $arg_new_pass, $arg_confirm_pass) {
-	$username = mysqli_real_escape_string($dbc, $arg_username);
-	$current_pass = mysqli_real_escape_string($dbc, $arg_current_pass);
-	$new_pass = mysqli_real_escape_string($dbc, $arg_new_pass);
-	$confirm_pass = mysqli_real_escape_string($dbc, $arg_confirm_pass);
+function change_password($dbc, $username, $current_pass, $new_pass, $confirm_pass) {
+	$username = mysqli_real_escape_string($dbc, $username);
+	$new_pass = mysqli_real_escape_string($dbc, $new_pass);
+	$confirm_pass = mysqli_real_escape_string($dbc, $confirm_pass);
 
-	$current_hash = hash('sha256', $current_pass);
 	$new_hash = hash('sha256', $new_pass);
-	$confirm_hash = hash('sha256', $current_pass);
+	$confirm_hash = hash('sha256', $confirm_pass);
 
 	if ($new_hash != $confirm_hash)
-		return false;
-	
-	$query = "SELECT * FROM users WHERE username = '$username' AND pass = '$current_hash'";
+		return "Passwords did not match";
 
-	return false;
+	$validationResult = validate($dbc, $username, $current_pass);
+	if ($validationResult == false) {
+		return "Current password incorrect";
+	}
+	
+	$updateQuery = "UPDATE users SET pass = '$new_hash' WHERE username = '$username'";
+
+	$results = mysqli_query($dbc, $updateQuery);
+	check_results($results);
+
+	# If the query failed or there were no matches, return false	
+	if ($results !== true) 
+		return "Password update failed";
+
+	return "Password update successful";
+}
+
+function change_email($dbc, $username, $password, $email) {
+	$email = mysqli_real_escape_string($dbc, $email);
+	$username = mysqli_real_escape_string($dbc, $username);
+	$validationResult = validate($dbc, $username, $password);
+	if ($validationResult == false) {
+		return "Current password incorrect";
+	}
+	
+	$query = "UPDATE users SET email = '$email' WHERE username = '$username'";
+	$results = mysqli_query($dbc, $query);
+	check_results($results);
+
+	# If the query failed or there were no matches, return false	
+	if ($results !== true) 
+		return "Email update failed";
+
+	return "Email update successful";
+}
+
+function is_super($dbc, $username) {
+	$query = "SELECT * FROM users WHERE username = '$username' AND super_admin = true";
+
+	$result = mysqli_query($dbc, $query);
+	check_results($result);
+
+	if ($result == false) 
+		return false;
+	if (mysqli_num_rows($result) == 0)
+		return false;
+
+	return true;
+}
+
+function add_admin($dbc, $username, $new_admin) {
+	$username = mysqli_real_escape_string($dbc, $username);
+	$new_admin = mysqli_real_escape_string($dbc, $new_admin);
+
+
+	$limbo_hash = hash('sha256', 'limbo');
+
+	if (!is_super($dbc, $username))
+		return "Current user is not a super administrator";
+
+	$query = "INSERT INTO users (username, pass, super_admin) VALUES ('$new_admin', '$limbo_hash', false)";
+
+	$result = mysqli_query($dbc, $query);
+	check_results($result);
+
+	if ($result !== true) 
+		return "Administrator creation failed";
+
+	return "Administrator: '$new_admin' successfully created (default password is 'limbo')";
+}
+
+function delete_admin($dbc, $username, $target_admin) {
+	$username = mysqli_real_escape_string($dbc, $username);
+	$target_admin = mysqli_real_escape_string($dbc, $target_admin);
+
+	if (!is_super($dbc, $username))
+		return "Current user is not a super administrator";
+
+
+	$query = "DELETE FROM users WHERE username = '$target_admin'";
+
+	$result = mysqli_query($dbc, $query);
+	check_results($result);
+
+	if ($result !== true) 
+		return "Administrator deletion failed";
+
+	return "Administrator: '$target_admin' successfully deleted";
 }
 
 ?>

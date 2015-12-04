@@ -1,3 +1,8 @@
+<?php
+require_once( '../includes/admin_tools.php' );
+require_once( '../includes/connect_db.php' );
+
+?>
 <html>
 <head>
 <title>Limbo - Password Change</title>
@@ -7,46 +12,41 @@
 <?php include '../header.php' ?>
 <?php include '../footer.php' ?>
 <div id="content">
-<div align="right">
-		Search | Add Admin | Change Password
-	</div>
-	<h1> Add Administrator</h1>
-	<form id='passwordForm' action='change_password.php' method='POST'>
+	<h1>Create Administrator</h1>
+	<form id='adminForm' action='add_admin.php' method='POST'>
 	<table id="formTable">
 	<tr>
 		<td>
-		Enter Username
+		Enter New Admin Username
 		</td>
 		<td> 
-		   <input type="text" name="current_password" placeholder="Your desired username here" />
+		   <input type="text" name="target_admin" placeholder="Username" />
 		</td>
 	</tr>
 	<tr>
 		<td>
-		Enter Password
 		</td>
 		<td>
-		   <input type="text" name="New Password" placeholder="Your password here"/>
-		</td>
-	</tr>
-	<tr>
-		<td>
-		Confirm Password
-		</td>
-		<td>
-		   <input type="text" name="Confirm Password" placeholder="Confirm your password here" "/>
-		</td>
-	</tr>
-	
-	<tr>
-		<td>
-		</td>
-		<td>
-			<input type="submit" name='password_change' value="Create Administrator"/>
+			<input type="submit" name='add' value="Create"/>
+			<input type="submit" name='delete' value="Delete"/>
 		</td>
 	</tr>
 	</table>
 	</form>
+	<br><br><br>
+	<br><br><br>
+	<br><br><br>
+	<?php
+		if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
+			if(isset($_POST['add'])) {
+				$result = add_admin($dbc, $_SESSION['username'], $_POST['target_admin']);
+				echo $result . '<br>';
+			} elseif(isset($_POST['delete'])) {
+				$result = delete_admin($dbc, $_SESSION['username'], $_POST['target_admin']);
+				echo $result . '<br>';
+			}
+		}
+	?>
 </div>
 </body>
 </html>

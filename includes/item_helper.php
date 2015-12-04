@@ -83,6 +83,8 @@ function perform_action($dbc, $id, $action) {
 		$query = "UPDATE stuff SET status = 'found' WHERE id = $id";
 	} elseif ($action == 'lost') {
 		$query = "UPDATE stuff SET status = 'lost' WHERE id = $id";
+	} elseif ($action == 'claimed') {
+		$query = "UPDATE stuff SET status = 'claimed' WHERE id = $id";
 	} else {
 		return false;
 	}
