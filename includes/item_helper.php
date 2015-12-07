@@ -46,6 +46,37 @@ function insert_item($dbc, $values, $status) {
 	}
 }
 
+function update_item($dbc, $values) {
+	if (isset($values['owner']))
+		$person = 'owner';
+	else
+		$person = 'finder';
+	# Get the next id for the stuff table
+	$id = $values['id'];
+
+	foreach ($values as $key => $value) {
+		# Sanitize the input
+		$values[$key] = mysqli_real_escape_string($dbc, $value);
+	}
+
+	# Get the location id by name
+	$building = mysqli_real_escape_string($dbc, $id);
+	$location_id = get_location_id($dbc, $values['building']);
+	$person_value = $values[$person];
+
+	$query= "UPDATE stuff SET item = '$values[item]', $person = '$person_value', phone = '$values[phone]', email = '$values[email]', location_id = $location_id, room = '$values[room]', description = '$values[description]', update_date = NOW() WHERE id = $values[id]";
+	
+	$results = mysqli_query($dbc,$query);
+	check_results($dbc, $results) ;
+	#mysqli_free_result($results)
+	if (!$results)
+		return false;
+	else {
+		# If succesfful, return the id of the newly inserted item
+		return $id;
+	}
+}
+
 # Get the next id in the stuff table
 function get_next_id($dbc) {
 	$query = "SELECT id FROM stuff ORDER BY id DESC";
@@ -85,6 +116,8 @@ function perform_action($dbc, $id, $action) {
 		$query = "UPDATE stuff SET status = 'lost' WHERE id = $id";
 	} elseif ($action == 'claimed') {
 		$query = "UPDATE stuff SET status = 'claimed' WHERE id = $id";
+	} elseif ($action == 'update') {
+		Header("Location: /searchreport.php?status=update&id=$id");
 	} else {
 		return false;
 	}

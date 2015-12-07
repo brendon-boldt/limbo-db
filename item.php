@@ -33,7 +33,7 @@ if (isset($_POST['action'])) {
 <!-- Display Item information here -->
 <h1 style="font-size: 42pt;">Item Information - <?php if ($data != -1) echo $data['item']; ?></h1>
 <span style="font-size:18pt"><b>Status: </b><?php echo ucwords($data['status']) ?></span><br>
-<?php echo "Near $data[room] in " . get_location_name($dbc, $data['id']); ?><br><br>
+<?php echo "Near $data[room] in " . get_location_name($dbc, $data['location_id']); ?><br><br>
 
 <h2>Description</h2>
 <?php echo $data['description'] ?><br><br><br>
@@ -59,6 +59,7 @@ if (isset($_SESSION['username'])) {
 		<option value='lost'>Change status to lost</option>
 		<option value='found'>Change status to found</option>
 		<option value='claimed'>Change status to claimed</option>
+		<option value='update'>Update item</option>
 		<option value='delete'>Delete item</option>
 	</select>
 	<input type='submit' value='Submit' target='_self'/>

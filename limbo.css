@@ -24,7 +24,7 @@ a {
 
 #header {
   width: 100%;
-  height: 5em;
+  height: 100px;
   background-color: #111;
   padding: 1em 0 1em 0;
 }
@@ -51,10 +51,10 @@ a {
 }
 
 #footer {
-  position: absolute;
+  position: relative;
   bottom: 0px;
   width: 100%;
-  height: 3em;
+  height: 40px;
   background-color: #111;
   padding: 1em 0 1em 0;
   text-align: center;
@@ -75,19 +75,23 @@ a {
   padding: 0 0.5em 0.5em 0.5em;
 }
 
+#queryTable {
+	border: solid;
+}
+
 #resultsTable {
 	margin-right: 3em;
 	float: right;
 	border: solid;
 }
 
-#resultsTable th {
+#resultsTable th, #queryTable th {
 	border: solid;
 	border-width: 2px;
 	min-width: 8em;
 }
 
-#resultsTable td {
+#resultsTable td,#queryTable td {
 	padding-right: 0.5em;
 	border: solid;
 	border-width: 1px;

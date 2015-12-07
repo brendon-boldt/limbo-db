@@ -5,6 +5,33 @@ require( 'includes/connect_db.php' ) ;
 # Includes these helper functions
 require( 'includes/item_helper.php' ) ;
 
+if (isset($_GET['status']) && $_GET['status'] == 'update') {
+	if (!isset($_SESSION['username'])) {
+		Header('Location: /searchreport.php');
+		die;
+	}
+	$data = search_item_by_id($dbc, $_GET['id']);
+	if ($data == -1) {
+		# If no id matches, redirect to the search page
+		header("Location: /searchreport.php");
+		die;
+	}
+	$_POST['item'] = $data['item'];
+	$_POST['phone'] = $data['phone'];
+	$_POST['email'] = $data['email'];
+	$_POST['building'] = get_location_name($dbc, $data['location_id']);
+	$_POST['room'] = $data['room'];
+	$_POST['description'] = $data['description'];
+	if (isset($data['owner'])) { 
+		$_POST['owner'] = $data['owner'];
+	}
+	if (isset($data['finder'])) {
+		$_POST['finder'] = $data['finder'];
+	}
+	$_SERVER[ 'REQUEST_METHOD' ] = 'POST';
+}
+
+
 # If lost/found is not specified, set the status to lost
 if (!isset($_GET['status'])) {
 	$_GET['status'] = 'lost';
@@ -32,7 +59,7 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
 else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 
 	# If a report action was submitted, insert the information into the database
-	if (isset($_POST['report'])) {
+	if (isset($_POST['report']) || isset($_POST['update'])) {
 		$errors = array();
 
 		$values = array();
@@ -43,7 +70,13 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 		$values['building'] = $_POST['building'];
 		$values['room'] = $_POST['room'];
 		$values['description'] = $_POST['description'];
-		$result = insert_item($dbc, $values, $page_status);
+		$result = false;
+		if (isset($_POST['report'])) {
+			$result = insert_item($dbc, $values, $page_status);
+		} else {
+			$values['id'] = $_POST['id'];
+			$result = update_item($dbc, $values);
+		}
 		# Check for any errors
 		$errors = validate_values($dbc, $values);
 
@@ -74,7 +107,11 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 <?php include 'header.php' ?>
 
 <div id="content">
-  <h1>Report/Search <?php echo ucwords($page_status)?> Items</h1>
+  <?php if($_GET['status'] != 'update') { ?>
+	  <h1>Report/Search <?php echo ucwords($page_status)?> Items</h1>
+  <?php } else { ?>
+	  <h1>Update Item</h1>
+  <?php } ?>
   <form id='form' action='searchreport.php?status=<?php echo $page_status ?>' method='POST'>
   <table id="formTable">
     <tr>
@@ -138,8 +175,13 @@ else if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
       <td>
       </td>
       <td>
-        <input type="submit" name='search' value="Search"/>
-        <input type="submit" name='report' value="Report <?php echo ucwords($page_status) ?>"/>
+	<?php if($_GET['status'] != 'update') { ?>
+		<input type="submit" name='search' value="Search"/>
+		<input type="submit" name='report' value="Report <?php echo ucwords($page_status) ?>"/>
+	<?php } else { ?>
+		<input type="submit" name='update' value="Update"/>
+		<input type="hidden" name="id" value="<?php echo $_GET['id'] ?>"/>
+	<?php } ?>
       </td>
     </tr>
   </table>

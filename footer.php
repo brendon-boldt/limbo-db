@@ -12,12 +12,16 @@
         echo "Logged in as $_SESSION[username] | $logout | $update";
 	if (is_super($dbc, $_SESSION['username'])) {
 		$add = "<a href='/admin/add_admin.php'>Create/Delete Admin</a>";
-		echo " | $add";
+		$query= "<a href='/admin/query.php'>Query</a>";
+		echo " | $add | $query";
 	}
       } else {
         # Login link
         echo "<a href='/admin.php'>Login</a>";
       }
     ?>
+    <script type='text/javascript'>
+	document.getElementsByTagName('body')[0].style.minHeight = window.innerHeight - 140;
+    </script>
   </div>
 </div>
