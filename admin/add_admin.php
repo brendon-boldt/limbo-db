@@ -1,5 +1,6 @@
 <?php
 session_start();
+# Checks to see if uses is an admininstrator
 if (!isset($_SESSION['username'])) {
 	Header("Location: /admin.php");
 	die;
@@ -43,6 +44,7 @@ require_once( '../includes/connect_db.php' );
 	<br><br><br>
 	<?php
 		if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
+			# Determines whether to add or delete the entered admin name
 			if(isset($_POST['add'])) {
 				$result = add_admin($dbc, $_SESSION['username'], $_POST['target_admin']);
 				echo $result . '<br>';

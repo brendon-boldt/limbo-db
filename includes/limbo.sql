@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 # Creates an admin user in the users table
+# The default password is the sha256 hash of 'gaze11e'
 INSERT INTO users (username, email, pass, super_admin)
     VALUES ("admin", "admin@nsa.gov", "3bba22597cc6eab9cdab248358a0f0500108a0e0ec8a7384cdf5cb62e8108adb", TRUE);
 
@@ -90,4 +91,5 @@ INSERT INTO locations (create_date, update_date, name) VALUES
 	(NOW(), NOW(), "Lower West Cedar Townhouses"),
 	(NOW(), NOW(), "Upper West Cedar Townhouses");
 
+# Prints a message to signal the process completed successfully
 SELECT 'Script executed successfully.' AS '';

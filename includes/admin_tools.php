@@ -25,17 +25,15 @@ function validate($dbc, $username = '', $password = '') {
 		return false;
 
 	$row = mysqli_fetch_array($results, MYSQLI_ASSOC);
-	/*
-	foreach($row as $value)
-		echo $value . "<br>";
-	*/
 	# If the validation succeeded, return the login username
 	$login_name = $row['username'];
 
 	return $login_name;
 }
 
+# Changes the password for user if the validation passes using the current_pass
 function change_password($dbc, $username, $current_pass, $new_pass, $confirm_pass) {
+	# Sanitize input
 	$username = mysqli_real_escape_string($dbc, $username);
 	$new_pass = mysqli_real_escape_string($dbc, $new_pass);
 	$confirm_pass = mysqli_real_escape_string($dbc, $confirm_pass);
@@ -43,6 +41,7 @@ function change_password($dbc, $username, $current_pass, $new_pass, $confirm_pas
 	$new_hash = hash('sha256', $new_pass);
 	$confirm_hash = hash('sha256', $confirm_pass);
 
+	# If the passwords do not match, no need to go further
 	if ($new_hash != $confirm_hash)
 		return "Passwords did not match";
 
@@ -63,6 +62,7 @@ function change_password($dbc, $username, $current_pass, $new_pass, $confirm_pas
 	return "Password update successful";
 }
 
+# Changes the email for a user if the current_pass passes validation
 function change_email($dbc, $username, $password, $email) {
 	$email = mysqli_real_escape_string($dbc, $email);
 	$username = mysqli_real_escape_string($dbc, $username);
@@ -82,6 +82,7 @@ function change_email($dbc, $username, $password, $email) {
 	return "Email update successful";
 }
 
+# Returns true if the current user is a super admin
 function is_super($dbc, $username) {
 	$query = "SELECT * FROM users WHERE username = '$username' AND super_admin = true";
 
@@ -96,6 +97,7 @@ function is_super($dbc, $username) {
 	return true;
 }
 
+# Adds a user with the specified username
 function add_admin($dbc, $username, $new_admin) {
 	$username = mysqli_real_escape_string($dbc, $username);
 	$new_admin = mysqli_real_escape_string($dbc, $new_admin);
@@ -103,9 +105,11 @@ function add_admin($dbc, $username, $new_admin) {
 
 	$limbo_hash = hash('sha256', 'limbo');
 
+	# Only super admins may create users
 	if (!is_super($dbc, $username))
 		return "Current user is not a super administrator";
 
+	# Adds admin with a default password of 'limbo' and as a non-super admin
 	$query = "INSERT INTO users (username, pass, super_admin) VALUES ('$new_admin', '$limbo_hash', false)";
 
 	$result = mysqli_query($dbc, $query);
@@ -117,10 +121,12 @@ function add_admin($dbc, $username, $new_admin) {
 	return "Administrator: '$new_admin' successfully created (default password is 'limbo')";
 }
 
+# Deletes the user with the given username
 function delete_admin($dbc, $username, $target_admin) {
 	$username = mysqli_real_escape_string($dbc, $username);
 	$target_admin = mysqli_real_escape_string($dbc, $target_admin);
 
+	# Only super admins may delete users
 	if (!is_super($dbc, $username))
 		return "Current user is not a super administrator";
 

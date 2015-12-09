@@ -41,17 +41,18 @@ function insert_item($dbc, $values, $status) {
 	if (!$results)
 		return false;
 	else {
-    # If succesfful, return the id of the newly inserted item
+		# If succesfful, return the id of the newly inserted item
 		return $id;
 	}
 }
 
+# Update item information based on the given values
 function update_item($dbc, $values) {
 	if (isset($values['owner']))
 		$person = 'owner';
 	else
 		$person = 'finder';
-	# Get the next id for the stuff table
+	# Get the ID of the item being updated
 	$id = $values['id'];
 
 	foreach ($values as $key => $value) {
@@ -64,11 +65,11 @@ function update_item($dbc, $values) {
 	$location_id = get_location_id($dbc, $values['building']);
 	$person_value = $values[$person];
 
+	# Build the UPDATE query
 	$query= "UPDATE stuff SET item = '$values[item]', $person = '$person_value', phone = '$values[phone]', email = '$values[email]', location_id = $location_id, room = '$values[room]', description = '$values[description]', update_date = NOW() WHERE id = $values[id]";
 	
 	$results = mysqli_query($dbc,$query);
 	check_results($dbc, $results) ;
-	#mysqli_free_result($results)
 	if (!$results)
 		return false;
 	else {

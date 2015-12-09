@@ -69,10 +69,14 @@ require_once( '../includes/connect_db.php' );
 	<br><br><br>
 	<?php
 		if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
+			# If the email field is set as not blank,
+			# change the user's email to the input
 			if (!empty($_POST['new_email'])) {
 				$result = change_email($dbc, $_SESSION['username'], $_POST['current_pass'],  $_POST['new_email']);
 				echo $result . '<br>';
 			}
+			# If the new/confirm password fields are not blank,
+			# change the password
 			if (!(empty($_POST['new_pass']) || empty($_POST['confirm_pass']))) {
 				$result = change_password($dbc, $_SESSION['username'], $_POST['current_pass'],  $_POST['new_pass'],  $_POST['confirm_pass']);
 				echo $result . '<br>';
