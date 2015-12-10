@@ -1,7 +1,8 @@
 <?php
 require_once('../includes/connect_db.php');
+require_once('../includes/admin_tools.php');
 session_start();
-if (!isset($_SESSION['username']) && is_super($dbc, $_SESSION['username'])) {
+if (!isset($_SESSION['username']) || !is_super($dbc, $_SESSION['username'])) {
 	Header("Location: /admin.php");
 	die;
 }

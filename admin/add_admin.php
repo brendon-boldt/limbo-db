@@ -16,7 +16,6 @@ require_once( '../includes/connect_db.php' );
 </head>
 <body>
 <?php include '../header.php' ?>
-<?php include '../footer.php' ?>
 <div id="content">
 	<h1>Create Administrator</h1>
 	<form id='adminForm' action='add_admin.php' method='POST'>
@@ -58,5 +57,6 @@ require_once( '../includes/connect_db.php' );
 <br><br><br>
 <a href='/admin/home.php'>Back</a>
 </div>
+<?php include '../footer.php' ?>
 </body>
 </html>
